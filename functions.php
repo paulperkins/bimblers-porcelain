@@ -4,9 +4,11 @@
  /* ------------------------------------ */
 if ( ! function_exists( 'bimbler_porcelain_styles' ) ) {
 
-	function bimbler_styles() {
+	function bimbler_porcelain_styles() {
 		wp_enqueue_style( 'parent-style', get_template_directory_uri().'/style.css' );
 		wp_enqueue_style( 'child-style', get_stylesheet_uri(), array('parent-style')  );
+		
+		wp_enqueue_style('font-awesome-min', get_stylesheet_directory_uri().  '/fa/css/font-awesome.min.css');
 	}
 
 }
