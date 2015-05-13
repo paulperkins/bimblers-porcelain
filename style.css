@@ -37,24 +37,24 @@
 	margin-bottom: 0px;
 	border-bottom: 0px;}
 	
-.alx-tabs-nav.tab-count-5 li { width: 20%; }
+.bimbler-tabs-nav.tab-count-5 li { width: 20%; }
 
-.alx-tabs-nav li.active a { border-bottom-color: #dd9933;  }
+.bimbler-tabs-nav li.active a { border-bottom-color: #dd9933;  }
 .post-comments span:before { border-right-color: #dd9933; }				
 
 
-.alx-tabs-nav li.active a, #footer .alx-tabs-nav li.active a, .comment-tabs li.active a, .wp-pagenavi a:hover, .wp-pagenavi a:active, .wp-pagenavi span.current 
+.bimbler-tabs-nav li.active a, #footer .bimbler-tabs-nav li.active a, .comment-tabs li.active a, .wp-pagenavi a:hover, .wp-pagenavi a:active, .wp-pagenavi span.current 
 {
 border-bottom-color: #dd9933!important;
 }
 
-.alx-tabs-nav li a
+.bimbler-tabs-nav li a
  { color: #777777!important;}
  
 .bimbler-badge a i
  { font-size: 30px;}
  
-.alx-tab img {display:inline; width: auto; } 
+.bimbler-tab img {display:inline; width: auto; } 
 
 /* Make buttons nice again. */
 /*  base : forms
