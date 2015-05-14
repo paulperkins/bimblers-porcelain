@@ -16,14 +16,15 @@
 /* =Theme customization starts here
 -------------------------------------------------------------- */
 
+
 /* PP - Google map fix: make the zoom controls visible. */
-.tribe-events-venue-map img { max-width: inherit !important; }
+/*.tribe-events-venue-map img { max-width: inherit !important; }
 .bimbler-locator img { max-width: inherit !important; }
-#bimbler-next-ride-map img { max-width: inherit !important; }
+#bimbler-next-ride-map img { max-width: inherit !important; } */
 
 
 /* PP - Make NGG responsive. */
-.ngg-slideshow, .ngg-slideshow img{
+/*.ngg-slideshow, .ngg-slideshow img{
   max-width:100%;
   height: auto;
 }
@@ -57,6 +58,7 @@ border-bottom-color: #dd9933!important;
  { font-size: 30px;}
  
 .bimbler-tab img {display:inline; width: auto; } 
+*/
 
 /* Make buttons nice again. */
 /*  base : forms
