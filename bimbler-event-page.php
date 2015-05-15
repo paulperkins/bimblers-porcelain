@@ -1,42 +1,49 @@
-<?php 
-/*
+<?php
+ /*
 Template Name: Bimbler Event Page Template
 Template Description: A custom template to display the Bimbler sidebar.
 */
 
- get_header(); 
- 
- ?>
+get_header();
 
-<section class="content">
-	
-	<?php //get_template_part('inc/page-title'); ?>
-	
-	<div class="xpad group">
-		
-		<?php while ( have_posts() ): the_post(); ?>
-		
-			<article <?php post_class('group'); ?>>
-				
-				<?php get_template_part('inc/page-image'); ?>
-				
-				<div class="xentry xthemeform">
-					<?php the_content(); ?>
-					<div class="clear"></div>
-				</div><!--/.entry-->
-				
-			</article>
-	
-	<div class="pad group">
-			
-			<?php /*if ( ot_get_option('page-comments') == 'on' ) {*/ comments_template('/comments.php',true); //} ?>
-			
-		<?php endwhile; ?>
-		
-	</div><!--/.pad-->
-	
-</section><!--/.content-->
+if ( have_posts() ) {
+	while ( have_posts() ) {
+		the_post();
 
-<?php  get_sidebar('bimblers'); ?>
+		//get all the page meta data (settings) needed (function located in unctions/meta.php)
+		$pexeto_page=pexeto_get_post_meta( $post->ID, array( 'slider', 'layout', 'show_title', 'sidebar' ) );
 
-<?php get_footer(); ?>
+		//include the before content template
+		locate_template( array( 'includes/html-before-content.php' ), true, true );
+
+		?>
+		<div class="content-box">
+		<?php
+		//display the page content
+		the_content();
+		wp_link_pages();
+
+		//print sharing
+		echo pexeto_get_share_btns_html( $post->ID, 'page' );
+
+		?>
+		<div class="clear"></div>
+		</div>
+		<?php
+
+		if ( pexeto_option( 'page_comments' ) ) {
+			//include the comments template
+			comments_template();
+		}
+
+	}
+}
+
+// Force the use of the sidebar for events.
+$pexeto_page['sidebar'] = 'bimblereventssidebar';
+
+//include the after content template
+locate_template( array( 'includes/html-after-content.php' ), true, true );
+
+get_footer();
+?>
