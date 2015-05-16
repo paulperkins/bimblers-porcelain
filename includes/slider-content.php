@@ -117,7 +117,7 @@ $color_style='';
 				
 				$item_data['main_title'] = $ride_title;
 				$item_data['description'] = $ride_excerpt;
-				$item_data['small_title'] = $ride_start_date;
+				$item_data['small_title'] = 'Our next ride: ' . $ride_start_date;
 				$item_data['but_one_link'] = $ride_url;
 			}
 			?>
