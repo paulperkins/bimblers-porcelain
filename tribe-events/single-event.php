@@ -612,20 +612,12 @@ function bimbler_create_tabs($tabs,$count, $event_id) {
 	$output = sprintf('	<ul class="bimbler-tabs-nav group tab-count-%s">', $count) . PHP_EOL;
 	foreach ( $tabs as $tab ) {
 
-		// Show text.
-		if (1) {
-			if ($counts[$tab] > 0) {
-				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
-			} else {
-				//$output .= sprintf('<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><i class="%3$s"></i><span style="display: block;">%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]);
-				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
-			}
+		if ($counts[$tab] > 0) {
+// Just text				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><span style="display: block;">%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
+			$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
 		} else {
-			if ($counts[$tab] > 0) {
-				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><i class="%3$s"></i></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
-			} else {
-				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><i class="%3$s"></i></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
-			}
+// Just text				$output .= sprintf('      <li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><span style="display: block;">%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
+			$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
 		}
 	}
 	$output .= '	</ul>' . PHP_EOL;
