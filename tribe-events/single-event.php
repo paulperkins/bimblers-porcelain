@@ -406,8 +406,10 @@ function bimbler_show_rsvp_form() {
 
 		$user_id = $current_user->ID;
 
-		$rsvp = Bimbler_RSVP::get_instance()->get_current_rsvp_object ($postid, $user_id);
+		$html .= '		    <h3 id="reply-title" class="comment-reply-title">Your RSVP</h3>';
 
+		$rsvp = Bimbler_RSVP::get_instance()->get_current_rsvp_object ($postid, $user_id);
+		
 		// If the event has passed OR
 		// meta values say that the event has closed and we've not RSVPd yes
 		// then don't allow RSVP changes.
@@ -425,7 +427,6 @@ function bimbler_show_rsvp_form() {
 				
 		} else {
 
-
 			if (null == $rsvp) {
 				$status = 'You have not RSVPd.';
 			}
@@ -437,7 +438,7 @@ function bimbler_show_rsvp_form() {
 				}
 			}
 				
-			$html  = '<div id="rsvp-form">';
+			$html .= '<div id="rsvp-form">';
 			$html .= '<div id="respond" class="comment-respond">';
 			$html .= '	<form method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
 			//$html .= '	<h3 id="reply-title" class="comment-reply-title">RSVP</h3>';
