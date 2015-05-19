@@ -44,7 +44,7 @@ if ( have_posts() ) {
 	}
 }
 
-// Force the use of the sidebar for events.
+// Force the use of the sidebar for events. Will be overriden if template type is 'full'.
 $pexeto_page['sidebar'] = 'bimblereventssidebar';
 
 //include the after content template
