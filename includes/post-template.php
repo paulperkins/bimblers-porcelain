@@ -8,12 +8,14 @@ $format = get_post_format();
 $add_post_class = is_single() ? 'blog-single-post' : 'blog-non-single-post';
 $add_post_class.=' theme-post-entry';
 
+//if (!is_single ()) {
 // PP - Fetch this post's category and set flag if featured ride.
-$bimblers_featured = has_category ('featured-ride', the_ID());
+$bimblers_featured = has_category ('featured-ride', get_queried_object_id());
 
 if ($bimblers_featured) {
 	$bimblers_ride = Bimbler_RSVP::get_instance()->get_next_ride_object();
 }
+//}
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( $add_post_class ); ?>>
 
@@ -67,7 +69,7 @@ if(!$format || $format=='video'){
 	}else {
 		// Display map for featured ride.
 		if ($bimblers_featured) {
-			error_log ('Ride: ' . json_encode ($bimblers_ride));
+			//error_log ('Ride: ' . json_encode ($bimblers_ride));
 			
 			$map_id = 'bimbler-next-ride-map';
 			$map_style = "width: 100%; height: 270px;";
