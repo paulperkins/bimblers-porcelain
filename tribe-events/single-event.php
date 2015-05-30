@@ -70,7 +70,7 @@ function show_gallery () {
 			
 		$html = '<div id="rsvp-gallery">';
 		$html .= '<div class="comment-respond">';
-		$html .= '	<form method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
+		$html .= '	<form action="#tab-event-photos" method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
 		//$html .= '		    <h3 id="reply-title" class="comment-reply-title">Gallery</h3>';
 
 		if (0 != $gallery_id) {
@@ -418,7 +418,7 @@ function bimbler_show_rsvp_form() {
 
 			$html .= '<div id="rsvp-form">';
 			$html .= '<div id="respond" class="comment-respond">';
-			$html .= '	<form method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
+			$html .= '	<form action="#tab-event-rsvps" method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
 			//$html .= '	<h3 id="reply-title" class="comment-reply-title">RSVP</h3>';
 			$html .= '<p>RSVPs are no longer open.</p>';
 			$html .= '	</form>';
@@ -440,7 +440,7 @@ function bimbler_show_rsvp_form() {
 				
 			$html .= '<div id="rsvp-form">';
 			$html .= '<div id="respond" class="comment-respond">';
-			$html .= '	<form method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
+			$html .= '	<form action="#tab-event-rsvps" method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
 			//$html .= '	<h3 id="reply-title" class="comment-reply-title">RSVP</h3>';
 			$html .= '<p>'. $status .'</p>';
 			//				$html .= '<div class="woo-sc-box tick rounded full>'. $status .'</div>';
