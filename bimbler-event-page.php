@@ -13,6 +13,11 @@ if ( have_posts() ) {
 		//get all the page meta data (settings) needed (function located in unctions/meta.php)
 		$pexeto_page=pexeto_get_post_meta( $post->ID, array( 'slider', 'layout', 'show_title', 'sidebar' ) );
 
+		// If we're displaying the calendar or the event list, use the full-width page template.
+		if (!is_single() && (tribe_is_past() || tribe_is_upcoming() || tribe_is_month())) {
+			$pexeto_page['layout'] = 'full';
+		}		
+		
 		//include the before content template
 		locate_template( array( 'includes/html-before-content.php' ), true, true );
 
@@ -39,7 +44,7 @@ if ( have_posts() ) {
 	}
 }
 
-// Force the use of the sidebar for events.
+// Force the use of the sidebar for events. Will be overriden if template type is 'full'.
 $pexeto_page['sidebar'] = 'bimblereventssidebar';
 
 //include the after content template

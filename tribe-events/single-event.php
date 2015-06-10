@@ -70,7 +70,7 @@ function show_gallery () {
 			
 		$html = '<div id="rsvp-gallery">';
 		$html .= '<div class="comment-respond">';
-		$html .= '	<form method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
+		$html .= '	<form action="#tab-event-photos" method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
 		//$html .= '		    <h3 id="reply-title" class="comment-reply-title">Gallery</h3>';
 
 		if (0 != $gallery_id) {
@@ -406,8 +406,10 @@ function bimbler_show_rsvp_form() {
 
 		$user_id = $current_user->ID;
 
-		$rsvp = Bimbler_RSVP::get_instance()->get_current_rsvp_object ($postid, $user_id);
+		$html .= '		    <h3 id="reply-title" class="comment-reply-title">Your RSVP</h3>';
 
+		$rsvp = Bimbler_RSVP::get_instance()->get_current_rsvp_object ($postid, $user_id);
+		
 		// If the event has passed OR
 		// meta values say that the event has closed and we've not RSVPd yes
 		// then don't allow RSVP changes.
@@ -416,7 +418,7 @@ function bimbler_show_rsvp_form() {
 
 			$html .= '<div id="rsvp-form">';
 			$html .= '<div id="respond" class="comment-respond">';
-			$html .= '	<form method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
+			$html .= '	<form action="#tab-event-rsvps" method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
 			//$html .= '	<h3 id="reply-title" class="comment-reply-title">RSVP</h3>';
 			$html .= '<p>RSVPs are no longer open.</p>';
 			$html .= '	</form>';
@@ -424,7 +426,6 @@ function bimbler_show_rsvp_form() {
 			$html .= '</div> <!-- #rsvp-form -->';
 				
 		} else {
-
 
 			if (null == $rsvp) {
 				$status = 'You have not RSVPd.';
@@ -437,9 +438,9 @@ function bimbler_show_rsvp_form() {
 				}
 			}
 				
-			$html  = '<div id="rsvp-form">';
+			$html .= '<div id="rsvp-form">';
 			$html .= '<div id="respond" class="comment-respond">';
-			$html .= '	<form method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
+			$html .= '	<form action="#tab-event-rsvps" method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
 			//$html .= '	<h3 id="reply-title" class="comment-reply-title">RSVP</h3>';
 			$html .= '<p>'. $status .'</p>';
 			//				$html .= '<div class="woo-sc-box tick rounded full>'. $status .'</div>';
@@ -611,20 +612,12 @@ function bimbler_create_tabs($tabs,$count, $event_id) {
 	$output = sprintf('	<ul class="bimbler-tabs-nav group tab-count-%s">', $count) . PHP_EOL;
 	foreach ( $tabs as $tab ) {
 
-		// Show text.
-		if (1) {
-			if ($counts[$tab] > 0) {
-				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
-			} else {
-				//$output .= sprintf('<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><i class="%3$s"></i><span style="display: block;">%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]);
-				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
-			}
+		if ($counts[$tab] > 0) {
+// Just text				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><span style="display: block;">%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
+			$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
 		} else {
-			if ($counts[$tab] > 0) {
-				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><i class="%3$s"></i></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
-			} else {
-				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><i class="%3$s"></i></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
-			}
+// Just text				$output .= sprintf('      <li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><span style="display: block;">%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
+			$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
 		}
 	}
 	$output .= '	</ul>' . PHP_EOL;

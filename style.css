@@ -119,3 +119,17 @@ input, textarea, button, select, label { font-family: inherit; }
 #tribe-bar-views .tribe-bar-views-list {
   z-index: 50; 
 }
+
+.bimbler-logo-text {
+   color: #777777;
+  font-size: 14px;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  line-height: 1.7;
+  float: right;
+  margin-left: 0;
+  position: relative;
+  display: inline;
+  float: left;
+  display: block;
+  padding: 2px 14px;
+}
