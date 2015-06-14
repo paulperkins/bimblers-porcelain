@@ -268,11 +268,22 @@ Template Description: A custom template to display the Bimbler sidebar.
   	}
  ?>
  
-<section class="content">
+<div id="content-container" class="content-boxed layout-full">
+	<div id="full-width" class="content">
+		<div class="content-box">
+
+
+<xsection class="content">
 	
-	<div class="page-title pad group">
+<!--	<div class="page-title pad group"> -->
+	<div class="page-title">
+		<div class="content-boxed">
+
 		<h1><i class="fa fa-user"></i>Profile page: <?php echo $user->display_name; ?></h1>
+		</div>
 	</div>
+
+<!--	</div> -->
 	
 <?php 
 	if (!is_user_logged_in()) {
@@ -441,9 +452,13 @@ Template Description: A custom template to display the Bimbler sidebar.
 	}
 ?>
 	
-</section><!--/.content-->
+</xsection><!--/.content-->
 
-<?php  get_sidebar(); ?>
+</div>
+</div>
+</div>
+
+<?php  //get_sidebar(); ?>
 
 <?php get_footer(); ?>
 
