@@ -121,6 +121,10 @@ $color_style='';
 				$item_data['small_title'] = 'Our next ride: ' . $ride_start_date;
 				$item_data['but_one_link'] = $ride_url;
 			}
+			
+			if (empty ($item_data['small_title'])) {
+				$item_data['small_title'] = '&nbsp;';
+			}
 			?>
 
 			 <li<?php echo $slide_data; ?> class="cs-layout-<?php echo $slide_layout; ?>" <?php echo $style; ?>>
