@@ -18,7 +18,8 @@ $color_style='';
 ?>
 
 <div class="content-slider-wrapper" <?php echo $color_style; ?>>
-<div class="content-slider cols-wrapper cols-2" id="<?php echo $slider_div_id; ?>" >
+<!--<div class="content-slider cols-wrapper cols-2" id="<?php //echo $slider_div_id; ?>" > -->
+<div class="content-slider cols-wrapper cols-1" id="<?php echo $slider_div_id; ?>" >
 	<div class="section-boxed">
 	<ul id="cs-slider-ul" style="min-height:<?php echo $slider_height; ?>px;">
 		<?php
@@ -149,7 +150,7 @@ $color_style='';
 					<?php } ?>
 				</div>
 				<!-- second slider box -->
-
+				
 				<?php if($slide_layout!=='centered'){ ?>
 				<div class="<?php echo $media_class; ?> col nomargin">
 					<?php 
