@@ -116,7 +116,7 @@ $color_style='';
 					$ride_rwgps = 0;
 				}
 				
-				$item_data['main_title'] = $ride_title;
+				$item_data['main_title'] = substr($ride_title, 0, 47);
 				$item_data['description'] = $ride_excerpt;
 				$item_data['small_title'] = 'Our next ride: ' . $ride_start_date;
 				$item_data['but_one_link'] = $ride_url;
