@@ -15,6 +15,21 @@ $slider_items=$slider_data['posts'];
 $first_color = get_post_meta($slider_items[0]->ID, PEXETO_CUSTOM_PREFIX.'bg_color', true);
 $color_style= $first_color ? 'style="background-color:#'.$first_color.'";':'';
 $color_style='';
+
+
+$bimbler_gallery_id = 175;//146;
+
+	function bimbler_get_gallery_pics ($gallery_id) {
+		global $wpdb;
+		global $nggdb;
+		
+		$pics = $nggdb->get_gallery($gallery_id, 'sortorder', 'ASC', true, 0, 0);
+		
+		//error_log ('Gallery ' . $gallery_id . ' has ' . count($pics) . ' pics.');
+			
+		return $pics;
+	}
+
 ?>
 
 <div class="content-slider-wrapper" <?php echo $color_style; ?>>
@@ -23,6 +38,12 @@ $color_style='';
 	<div class="section-boxed">
 	<ul id="cs-slider-ul" style="min-height:<?php echo $slider_height; ?>px;">
 		<?php
+
+		$bimbler_cover_pics = bimbler_get_gallery_pics ($bimbler_gallery_id);
+		
+		shuffle ($bimbler_cover_pics);
+		
+		$bimbler_posts = Bimbler_RSVP::get_instance()->get_upcoming_events (5);
 
 		//set the meta key values for each item that will be retrieved
 		$data_keys = array('layout', 'animation', 'bg_color', 'text_color', 'bg_image_url', 
@@ -48,7 +69,34 @@ $color_style='';
 			$slide_data='';
 			$slide_data_keys = array('bg_image_url', 'bg_image_opacity', 'layout', 'animation', 'bg_color');
 			foreach ($slide_data_keys as $key) {
-				$slide_data.=' data-'.$key.'="'.$item_data[$key].'"';
+
+				if ('bg_image_url' == $key) {				
+					if (($title == '[bimblers_next_ride]') && class_exists('Bimbler_RSVP')) {
+	
+						$slide_data.=' data-'.$key.'="'.$bimbler_cover_pics[0]->imageURL.'"';
+						
+					} else if (($title == '[bimblers_next_ride_1]') && class_exists('Bimbler_RSVP')) {
+	
+						$slide_data.=' data-'.$key.'="'.$bimbler_cover_pics[1]->imageURL.'"';
+	 
+					} else if (($title == '[bimblers_next_ride_2]') && class_exists('Bimbler_RSVP')) {
+	
+						$slide_data.=' data-'.$key.'="'.$bimbler_cover_pics[2]->imageURL.'"';
+	
+					} else if (($title == '[bimblers_next_ride_3]') && class_exists('Bimbler_RSVP')) {
+	
+						$slide_data.=' data-'.$key.'="'.$bimbler_cover_pics[3]->imageURL.'"';
+	
+					} else if (($title == '[bimblers_next_ride_4]') && class_exists('Bimbler_RSVP')) {
+	
+						$slide_data.=' data-'.$key.'="'.$bimbler_cover_pics[4]->imageURL.'"';
+	
+					} else {
+						$slide_data.=' data-'.$key.'="'.$item_data[$key].'"';
+					} 
+				}	else {
+					$slide_data.=' data-'.$key.'="'.$item_data[$key].'"';
+				}
 			}
 
 			if(!empty($item_data['bg_align'])){
@@ -92,14 +140,34 @@ $color_style='';
 			$title = empty($item_data['main_title']) ? '' : $item_data['main_title'];
 
 			// Fetch the next ride details.
-			if (($title == '[bimblers_next_ride]') && class_exists('Bimbler_RSVP')) {
+			if ((strstr ($title, '[bimblers_next_ride')) && class_exists('Bimbler_RSVP')) {
+				
+				if ($title == '[bimblers_next_ride]') {
+
+					$event = $bimbler_posts[0];
+				
+				} else if ($title == '[bimblers_next_ride_1]') {
+
+					$event = $bimbler_posts[1];
+ 
+				} else if ($title == '[bimblers_next_ride_2]') {
+
+					$event = $bimbler_posts[2];
+
+				} else if ($title == '[bimblers_next_ride_3]') {
+
+					$event = $bimbler_posts[3];
+
+				} else if ($title == '[bimblers_next_ride_4]') {
+
+					$event = $bimbler_posts[4];
+				}
+				
 				$date_str = 'D j M';
 	
-				error_log ('Fetching next ride details');
+				//error_log ('Fetching next ride details');
 				
-				$posts = Bimbler_RSVP::get_instance()->get_next_event();
-				
-				$event = $posts[0];
+				//$posts = Bimbler_RSVP::get_instance()->get_next_event();
 			
 				$ride_title = $event->post_title; 
 				$ride_url 	= get_permalink ($event->ID);
@@ -118,7 +186,7 @@ $color_style='';
 				
 				$item_data['main_title'] = substr($ride_title, 0, 47);
 				$item_data['description'] = $ride_excerpt;
-				$item_data['small_title'] = 'Our next ride: ' . $ride_start_date;
+				$item_data['small_title'] = 'Coming up: ' . $ride_start_date;
 				$item_data['but_one_link'] = $ride_url;
 			}
 			
