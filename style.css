@@ -137,4 +137,5 @@ input, textarea, button, select, label { font-family: inherit; }
 /* We don't want capitals. */
 .cs-title {
   text-transform: none;
+  white-space: nowrap;
 }
