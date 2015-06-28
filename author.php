@@ -267,6 +267,8 @@ Template Description: A custom template to display the Bimbler sidebar.
  			}
   	}
  ?>
+
+</div>
  
 <div id="content-container" class="content-boxed layout-full">
 	<div id="full-width" class="content">
