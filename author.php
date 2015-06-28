@@ -274,19 +274,6 @@ Template Description: A custom template to display the Bimbler sidebar.
 	<div id="full-width" class="content">
 		<div class="content-box">
 
-
-<xsection class="content">
-	
-<!--	<div class="page-title pad group"> -->
-	<div class="page-title">
-		<div class="content-boxed">
-
-		<h1><i class="fa fa-user"></i>Profile page: <?php echo $user->display_name; ?></h1>
-		</div>
-	</div>
-
-<!--	</div> -->
-	
 <?php 
 	if (!is_user_logged_in()) {
 		echo '<div class="bimbler-alert-box notice"><span>Notice: </span>You must be logged in to view this page.</div>';
@@ -453,8 +440,6 @@ Template Description: A custom template to display the Bimbler sidebar.
 <?php 
 	}
 ?>
-	
-</xsection><!--/.content-->
 
 </div>
 </div>
