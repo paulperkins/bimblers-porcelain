@@ -66,7 +66,8 @@ function show_gallery () {
 	}
 		
 	// Only show content to logged-in users, and only if we're on an event page.
-	if (is_user_logged_in() && is_single() && isset ($gallery_id)) {
+//	if (is_user_logged_in() && is_single() && isset ($gallery_id)) {
+	if (is_user_logged_in() && isset ($gallery_id)) {
 			
 		$html = '<div id="rsvp-gallery">';
 		$html .= '<div class="comment-respond">';
@@ -111,7 +112,8 @@ function show_ride_page () {
 	//return null;
 		
 	// Only show content to logged-in users, and only if we're on an event page.
-	if (is_user_logged_in() && is_single()) {
+//	if (is_user_logged_in() && is_single()) {
+	if (is_user_logged_in()) {
 
 		$meta_ride_page = get_post_meta ($post_id, '_BimblerRidePage', true);
 
@@ -203,7 +205,8 @@ function show_rsvp_table () {
 
 	// Only show content to logged-in users, and only if we're on an event page.
 	//	if (is_user_logged_in() && is_single())
-	if (is_single())
+//	if (is_single())
+	if (is_user_logged_in())
 	{
 		$html = '<div id="rsvp-list" class="widget">';
 		$html .= '		    <h3 id="reply-title" class="comment-reply-title">Who\'s Coming</h3>';
@@ -399,7 +402,8 @@ function bimbler_show_rsvp_form() {
 		
 	// Only show content to logged-in users, and only if we're on an event page.
 //	if (is_user_logged_in() && is_single() && !Bimbler_RSVP::get_instance()->has_event_passed ($postid)) {
-	if (is_user_logged_in() && is_single()) {
+//	if (is_user_logged_in() && is_single()) {
+	if (is_user_logged_in()) {
 
 		global $current_user;
 		get_currentuserinfo();
