@@ -19,6 +19,23 @@ if ( !defined('BIMBLER_AJAX_CLASS') ) {
 $event_id = get_the_ID();
 
 
+function bimbler_logged_in () {
+
+//	return is_user_logged_in ();
+	
+	$this_user = wp_get_current_user ();
+	
+	if (empty ($this_user->ID)) {
+
+		error_log (print_r ($this_user, true));
+		
+		error_log ('Rejecting user - not logged-in');
+		return false;
+	}
+	
+	return true;
+}
+
 function get_ride_page ($post_id) {
 	
 	$meta_ride_page = get_post_meta ($post_id, '_BimblerRidePage', true);
@@ -67,7 +84,7 @@ function show_gallery () {
 		
 	// Only show content to logged-in users, and only if we're on an event page.
 //	if (is_user_logged_in() && is_single() && isset ($gallery_id)) {
-	if (is_user_logged_in() && isset ($gallery_id)) {
+	if (bimbler_logged_in() && isset ($gallery_id)) {
 			
 		$html = '<div id="rsvp-gallery">';
 		$html .= '<div class="comment-respond">';
@@ -113,7 +130,7 @@ function show_ride_page () {
 		
 	// Only show content to logged-in users, and only if we're on an event page.
 //	if (is_user_logged_in() && is_single()) {
-	if (is_user_logged_in()) {
+	if (bimbler_logged_in()) {
 
 		$meta_ride_page = get_post_meta ($post_id, '_BimblerRidePage', true);
 
@@ -206,7 +223,7 @@ function show_rsvp_table () {
 	// Only show content to logged-in users, and only if we're on an event page.
 	//	if (is_user_logged_in() && is_single())
 //	if (is_single())
-	if (is_user_logged_in())
+	if (bimbler_logged_in())
 	{
 		$html = '<div id="rsvp-list" class="widget">';
 		$html .= '		    <h3 id="reply-title" class="comment-reply-title">Who\'s Coming</h3>';
@@ -248,7 +265,7 @@ function show_rsvp_table () {
 		{
 			$html .= '<p>No RSVPs yet.</p>';
 		}
-		else if (!is_user_logged_in())
+		else if (!bimbler_logged_in())
 		{
 			$html .= "<p>You must be logged in to see RSVPs.</p>";
 		}
@@ -403,7 +420,7 @@ function bimbler_show_rsvp_form() {
 	// Only show content to logged-in users, and only if we're on an event page.
 //	if (is_user_logged_in() && is_single() && !Bimbler_RSVP::get_instance()->has_event_passed ($postid)) {
 //	if (is_user_logged_in() && is_single()) {
-	if (is_user_logged_in()) {
+	if (bimbler_logged_in()) {
 
 		global $current_user;
 		get_currentuserinfo();
@@ -678,7 +695,7 @@ $scroller_style = '';
 	
 <?php 
 	// Check if the user is logged-in - this page should only be visible if they are.
-	if (!is_user_logged_in())
+	if (!bimbler_logged_in())
 	{
 		echo '<div class="bimbler-alert-box notice"><span>Notice: </span>You must be logged in to view this page.</div>';
 	}
