@@ -27,7 +27,7 @@ function bimbler_logged_in () {
 	
 	if (empty ($this_user->ID)) {
 
-		error_log (print_r ($this_user, true));
+		//error_log (print_r ($this_user, true));
 		
 		error_log ('Rejecting user - not logged-in');
 		return false;
@@ -547,7 +547,6 @@ function bimbler_show_rsvp_form() {
 function show_summary_page () {
 	
 ?>
-	<?php // http://mac.bimblers.com/wp-admin/post.php?post=926&action=edit ?>
 			<?php 
 				if (current_user_can( 'manage_options')) {																																				
 					the_title( '<h1 class="post-title">', '<a href="' . site_url () . '/wp-admin/post.php?post=' . get_the_ID() . '&action=edit" target="_external"><i class="fa fa-pencil"></i></a>&nbsp;<a href="' . site_url () . '/wp-admin/admin.php?page=mailusers-send-to-group-page&rsvp_event_id=' . get_the_ID() . '" target="_external"><i class="fa fa-envelope-o"></i></a></h1>' );
@@ -687,11 +686,6 @@ if ( $tabs && ($count > 1) )
 $scroller_style = '';
 
 ?>
-
-	<!-- Notices -->
-	<?php //tribe_events_the_notices() ?>
-
-		
 	
 <?php 
 	// Check if the user is logged-in - this page should only be visible if they are.
