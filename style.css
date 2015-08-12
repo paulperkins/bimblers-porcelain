@@ -139,3 +139,10 @@ input, textarea, button, select, label { font-family: inherit; }
   text-transform: none;
   white-space: nowrap;
 }
+
+/* Don't indent textarea for comments. */
+#commentform textarea {
+  padding: 12px 6px;
+  line-height: normal; /*2em; */
+  text-indent: initial; 
+}
