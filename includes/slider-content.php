@@ -57,6 +57,7 @@ $bimbler_gallery_id = 175;//146;
 
 			//get the image URL
 			$imgurl=$item_data['image_url'];
+			
 			if ( pexeto_option( 'content_auto_resize' )=='true' && !empty($imgurl)) {
 				// $imgurl=pexeto_get_resized_image( $imgurl, $img_width , pexeto_option( 'content_img_height' ) );
 				$imgurl = pexeto_get_resized_image( $imgurl, $img_width, $img_height, true );
@@ -86,11 +87,11 @@ $bimbler_gallery_id = 175;//146;
 					} else if (($title == '[bimblers_next_ride_3]') && class_exists('Bimbler_RSVP')) {
 	
 						$slide_data.=' data-'.$key.'="'.$bimbler_cover_pics[3]->imageURL.'"';
-	
+
 					} else if (($title == '[bimblers_next_ride_4]') && class_exists('Bimbler_RSVP')) {
 	
 						$slide_data.=' data-'.$key.'="'.$bimbler_cover_pics[4]->imageURL.'"';
-	
+
 					} else {
 						$slide_data.=' data-'.$key.'="'.$item_data[$key].'"';
 					} 
@@ -138,6 +139,23 @@ $bimbler_gallery_id = 175;//146;
 			}
 
 			$title = empty($item_data['main_title']) ? '' : $item_data['main_title'];
+
+			// Show the welcome message.
+			if ((strstr ($item_data['small_title'], '[bimblers_welcome]')) && class_exists('Bimbler_RSVP')) {
+				
+				if (is_user_logged_in()) {
+					
+					global $current_user;
+					get_currentuserinfo();
+
+					$item_data['small_title'] = 'Welcome back, ' . $current_user->first_name;
+				} else {
+
+					$item_data['small_title'] = '';
+					
+				}
+				
+			}
 
 			// Fetch the next ride details.
 			if ((strstr ($title, '[bimblers_next_ride')) && class_exists('Bimbler_RSVP')) {
