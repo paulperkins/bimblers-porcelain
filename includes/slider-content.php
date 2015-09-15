@@ -191,11 +191,7 @@ $bimbler_gallery_id = 175;//146;
 				$ride_url 	= get_permalink ($event->ID);
 				$ride_rwgps = Bimbler_RSVP::get_instance()->get_rwgps_id ($event->ID);
 				$ride_start_date = tribe_get_start_date($event->ID, false, $date_str);
-				$ride_excerpt = $event->post_excerpt;
-				
-				if (empty ($ride_excerpt)) {
-					$ride_excerpt = $event->post_content;
-				}
+				$ride_excerpt = $event->post_excerpt; // Only use the excerpt - post_content is generally too long.
 				
 				//Don't show the route if the user is not logged in.
 				if (!is_user_logged_in()) {
