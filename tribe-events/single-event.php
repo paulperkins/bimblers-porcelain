@@ -303,7 +303,9 @@ function show_rsvp_table () {
 					}
 						
 					// Use the new avatar style.
-					$html .= '						<div class="avatar-rsvps-clipped" style="background-image: url(\'' . bimbler_get_avatar_img($avatar)  . '\');"></div>' . PHP_EOL;
+					//$html .= '						<div class="avatar-rsvps-clipped" style="background-image: url(\'' . bimbler_get_avatar_img($avatar)  . '\');"></div>' . PHP_EOL;
+					// Work around the iOS bug...
+					$html .= '							<img src="' . bimbler_get_avatar_img($avatar) . '" style="width:64 !important;  height:64 !important;" class="avatar avatar-96 wp-user-avatar wp-user-avatar-96 alignnone photo">' . PHP_EOL;
 
 					// Only show if the event has ended or we're admin / host.
 					if (can_modify_attendance ($postid) || $has_event_passed)
@@ -374,7 +376,10 @@ function show_rsvp_table () {
 						$html .= '<li class="AvatarListSide bimbler-avatar-narrow"><div class="permalink"></div>';
 
 						// Use the new avatar style.
-						$html .= '						<div class="avatar-rsvps-clipped" style="background-image: url(\'' . bimbler_get_avatar_img($avatar)  . '\');"></div>' . PHP_EOL;
+						//$html .= '						<div class="avatar-rsvps-clipped" style="background-image: url(\'' . bimbler_get_avatar_img($avatar)  . '\');"></div>' . PHP_EOL;
+						
+						// Work around the iOS bug...
+						$html .= '							<img src="' . bimbler_get_avatar_img($avatar) . '" style="width:64 !important;  height:64 !important;" class="avatar avatar-96 wp-user-avatar wp-user-avatar-96 alignnone photo">' . PHP_EOL;
 						
 						$html .= '<p><a href="/profile/' . urlencode ($user_info->user_nicename) .'/">' . $user_info->nickname;
 	
