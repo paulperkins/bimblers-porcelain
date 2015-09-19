@@ -699,7 +699,7 @@ $scroller_style = '';
 
 	<div class="bimbler-tabs-container" <?php echo $scroller_style; ?>>
 	
-		<ul id="tab-event-summary" class="bimbler-tab group avatars-enabled">
+		<ul id="tab-event-summary" class="bimbler-tab avatars-enabled group">
 
 			<div class="pad group">
 
@@ -710,7 +710,7 @@ $scroller_style = '';
 		</ul> <!-- tab-event-summary -->
 
 		
-		<ul id="tab-event-details" class="bimbler-tab group avatars-enabled">
+		<ul id="tab-event-details" class="bimbler-tab avatars-enabled group">
 		
 		
 			<div class="pad group">
@@ -724,7 +724,7 @@ $scroller_style = '';
 			</div>	
 		</ul> <!-- tab-event-details -->
 
-		<ul id="tab-event-map" class="bimbler-tab group avatars-enabled">
+		<ul id="tab-event-map" class="bimbler-tab avatars-enabled group">
 			<div class="pad group">
 		
 			<?php bimber_show_map_page(); ?>
@@ -733,7 +733,7 @@ $scroller_style = '';
 		</ul> <!-- tab-event-rsvps -->
 
 		
-		<ul id="tab-event-rsvps" class="bimbler-tab group avatars-enabled">
+		<ul id="tab-event-rsvps" class="bimbler-tab avatars-enabled group">
 			<div class="pad group">
 			
 			<div class="entry themeform">
@@ -748,7 +748,7 @@ $scroller_style = '';
 		</ul> <!-- tab-event-rsvps -->
 
 		
-		<ul id="tab-event-photos" class="bimbler-tab group avatars-enabled">
+		<ul id="tab-event-photos" class="bimbler-tab avatars-enabled group">
 			<div class="pad group">
 			
 			<div class="entry themeform">
@@ -761,7 +761,7 @@ $scroller_style = '';
 		</ul> <!-- tab-event-photos -->
 
 		
-		<ul id="tab-event-comments" class="bimbler-tab group avatars-enabled">
+		<ul id="tab-event-comments" class="bimbler-tab avatars-enabled group">
 			<div class="pad group">
 		
 			<h4>Comments Here</h4>
