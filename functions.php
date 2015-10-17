@@ -61,3 +61,14 @@ remove_filter('tribe_events_after_footer', array('TribeiCal', 'maybe_add_link'),
 add_filter( 'xmlrpc_methods' , function( $methods ) { unset( $methods[ 'pingback.ping' ] ); return $methods; } );
 
 
+
+/* Specify the day in date format. */
+function bimbler_amend_tribe_date_format ($args) {
+	
+	$args['same_year_format'] = 'l F j';
+
+	return $args;
+}
+
+add_filter ('tribe_events_event_schedule_details_formatting', 'bimbler_amend_tribe_date_format'); 
+
