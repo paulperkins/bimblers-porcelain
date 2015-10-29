@@ -146,3 +146,12 @@ input, textarea, button, select, label { font-family: inherit; }
   line-height: normal; /*2em; */
   text-indent: initial; 
 }
+
+/* Slim-down the comment boxes */
+.comment-box {
+/*    padding: 10px; */
+    padding-top: 10px;
+    padding-right: 3%;
+    padding-bottom: 10px;
+    padding-left: 3%; 
+}
