@@ -83,24 +83,19 @@ function show_gallery () {
 	}
 		
 	// Only show content to logged-in users, and only if we're on an event page.
-//	if (is_user_logged_in() && is_single() && isset ($gallery_id)) {
 	if (bimbler_logged_in() && isset ($gallery_id)) {
 			
 		$html = '<div id="rsvp-gallery">';
 		$html .= '<div class="comment-respond">';
 		$html .= '	<form action="#tab-event-photos" method="post" id="commentform" class="commentform" enctype="multipart/form-data">';
-		//$html .= '		    <h3 id="reply-title" class="comment-reply-title">Gallery</h3>';
 
 		if (0 != $gallery_id) {
 			//$html .= do_shortcode ('[nggallery id='. $gallery_id .' display_type="photocrati-nextgen_basic_thumbnails"]');
 			//$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_basic_extended_album"]');
 
-			$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_basic_thumbnails"]');
+			$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_basic_thumbnails" order_by="pid" order_direction="DESC"]');
 			//$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_pro_thumbnail_grid"]');
 				
-			//$html .= nggShowGallery ($gallery_id, 'photocrati-nextgen_basic_thumbnails');
-			//$html .= nggShowGallery ($gallery_id);
-
 			$html .= '<br><br><br><h4>Upload an Image</h4>';
 			$html .= do_shortcode ('[ngg_uploader id='. $gallery_id .']');
 		} else {
