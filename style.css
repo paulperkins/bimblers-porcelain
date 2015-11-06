@@ -149,9 +149,7 @@ input, textarea, button, select, label { font-family: inherit; }
 
 /* Slim-down the comment boxes */
 .comment-box {
-/*    padding: 10px; */
-    padding-top: 10px;
-    padding-right: 3%;
-    padding-bottom: 10px;
-    padding-left: 3%; 
+    margin-bottom: 10px;
+    padding: 0;
+    background-color: none;
 }
