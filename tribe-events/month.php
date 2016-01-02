@@ -23,4 +23,12 @@ if ( !defined('ABSPATH') ) { die('-1'); } ?>
 <?php tribe_get_template_part('month/content'); ?>
 </div>
 
+<?php
+	if (is_user_logged_in()) {
+?>	
+		<a href="/events/ical=1"><i class="fa fa-calendar-plus-o"></i> Add to calendar.</a>
+<?php	
+	} 
+?>
+
 <?php do_action( 'tribe_events_after_template' ) ?>

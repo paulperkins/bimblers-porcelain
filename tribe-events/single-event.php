@@ -29,11 +29,18 @@ function bimbler_logged_in () {
 
 		//error_log (print_r ($this_user, true));
 		
-		error_log ('Rejecting user - not logged-in');
+//		error_log ('Rejecting user - not logged-in');
 		return false;
 	}
 	
 	return true;
+}
+
+
+function get_event_in_progress ($post_id) {
+
+	return Bimbler_RSVP::get_instance()->is_event_in_progress ($post_id);	
+
 }
 
 function get_ride_page ($post_id) {
@@ -597,6 +604,197 @@ function show_summary_page () {
 		
 }
 
+/**
+	* Adds the tracker canvas.
+	*
+	* @param
+	*/
+function render_tracker_canvas ($event_id, $rwgps_id) {
+	global $bimbler_mobile_time_str;
+	global $bimbler_mobile_day_time_str;
+	global $bimbler_mobile_date_str;
+
+	global $current_user;
+	get_currentuserinfo();
+	
+	$content = '';
+	
+	$nonce = wp_create_nonce('bimbler_tracker');
+	
+	// Test.
+	//$rwgps_id = 6463068;
+	
+	$map_style = 'height: 500px; width: 100%; margin-bottom: 15px;';
+	
+	$content .= '				<div id="bimbler_tracker_map_canvas" style="' . $map_style . '"';
+	
+	$content .= ' data-event-id="' . $event_id . '"';
+	$content .= ' data-user-id="' . $current_user->ID . '"';
+	$content .= ' data-nonce="' . $nonce . '"';
+	
+	if (isset ($rwgps_id)) {
+		$content .= ' data-rwgps-id="' . $rwgps_id . '"';
+	}
+	
+	$content .= '></div>' . PHP_EOL;
+	
+	return $content;
+}
+
+
+/**
+	* Adds the locator tab.
+	*
+	* @param
+	*/
+function show_tracker ($event_id) {
+	global $bimbler_mobile_time_str;
+	global $bimbler_mobile_day_time_str;
+	global $bimbler_mobile_date_str;
+
+
+	$post_id = $event_id;
+
+	$content = '';
+
+	//return null;
+
+	// Only show content to logged-in users, and only if we're on an event page.
+	if (is_user_logged_in()) {
+			
+		$nonce = wp_create_nonce('bimbler_tracker');
+		
+		$rwgps_id = Bimbler_RSVP::get_instance()->get_rwgps_id ($event_id);
+
+		$content .= '';
+			
+		$this_rsvp = Bimbler_RSVP::get_instance()->get_current_rsvp ($event_id);
+		
+		// Only show to admin users, or to those who have RSVPd 'Yes' to this event.
+		if (!current_user_can( 'manage_options' ) &&
+				(!isset ($this_rsvp) || ('Y' != $this_rsvp))) {
+					
+			$content .= '<div class="bimbler-alert-box notice"><span>Notice: </span>You must RSVP for this event to see this page.</div>';
+
+		} elseif (!current_user_can( 'manage_options' ) && // Don't show if not in-progress.
+				(!Bimbler_RSVP::get_instance()->is_event_in_progress($event_id))) {
+				
+			$content .= '<div class="bimbler-alert-box notice"><span>Notice: </span>The event will not be starting soon, or finished a while ago.</div>';
+			
+		} else { // All good - render the tracker.
+
+			$content .= '		<div class="bimbler-tracker">' . PHP_EOL;
+			
+			$content .= render_tracker_canvas ($event_id, $rwgps_id);
+			
+			$content .= '		</div> <!-- /bimbler-tracker -->' . PHP_EOL;
+			
+			// Fake clicking the first tab.
+			//$content .= '<script type="text/javascript">jQuery (function (){$(document).trigger(\'showMap\');});(jQuery);</script>' . PHP_EOL;
+//			$content .= '<script type="text/javascript">$(\'a\').trigger("shown.tracker.tab");</script>' . PHP_EOL;
+
+$xcontent .= '
+<script type="text/javascript">
+	jQuery(document).ready(function($)
+	{
+		$(\'a[data-toggle="bimbler-tab"]\').trigger("shown.tracker.tab");
+	});
+</script>
+';
+
+
+		}
+
+		global $current_user;
+		get_currentuserinfo();
+
+		$this_user_id = $current_user->ID;
+
+
+		$content .= '<div id="bimbler-whos-who" class="widget">';
+		$content .= '		    <h3 id="reply-title" class="comment-reply-title">Who\'s Who (only showing ' . $current_user->user_firstname . ' and event hosts)</h3>';
+
+
+		// The who's who box.
+/*		$content .= '	<div class="panel panel-default">' . PHP_EOL;
+		$content .= '		<div class="panel-heading">' . PHP_EOL;
+		$content .= '			<h4 class="panel-title">Who\'s who</h4>' . PHP_EOL;
+		$content .= '		</div>' . PHP_EOL;
+		
+		$content .= '		<div class="panel-body">' . PHP_EOL;
+*/
+		
+		$rsvps = Bimbler_RSVP::get_instance()->get_event_rsvp_object ($event_id, 'Y');
+		$host_users = Bimbler_RSVP::get_instance()->get_event_host_users ($event_id);
+			
+		$html = '<div id="AvatarListSide" class="AvatarListSide-wrap">';
+
+		if (0 == count ($rsvps))
+		{
+			$html .= '<p>No RSVPs yet.</p>';
+		} else	{
+	
+			$html .= '		    <ul>';
+
+			foreach ( $rsvps as $rsvp) {
+
+				$user_info   = get_userdata ($rsvp->user_id);
+
+				// Only show current user and event hosts.
+				if (in_array ($user_info->id, $host_users) || ($this_user_id == $user_info->id)) {
+
+					$avatar = '';
+						
+					if (isset ($user_info->user_login)) {
+						$avatar .= get_avatar ($rsvp->user_id, null, null, $user_info->user_login);
+					}
+	
+					$html .= '<li class="AvatarListSide bimbler-avatar-narrow bimbler-avatar-border">';
+						
+					// Output an innocuous DIV if the user cannot amend attendance, or if the Ajax module is not loaded.
+					// Store the RSVP ID.
+					//$html .= '<div class="rsvp-checkin-container" id="'. $rsvp->id .'">';
+						
+					$html .= '							<img src="' . bimbler_get_avatar_img($avatar) . '" style="width:64 !important;  height:64 !important;" class="avatar avatar-96 wp-user-avatar wp-user-avatar-96 alignnone photo bimbler-whoswho-marker" ';
+					$html .= 'id="user-avatar-' . $rsvp->user_id . '" data-user-id="' . $rsvp->user_id . '">' . PHP_EOL;
+	
+					//$html .= '</div>';
+	
+					if (isset ($user_info->user_nicename)) {
+						$html .= '<p>' . $user_info->nickname;
+	
+						if (in_array ($user_info->id, $host_users)) {
+							$html .= '<br>(Host)'; 
+						}
+	
+						$html .= '</p>';
+					}
+						
+					$html .= '</li>';
+				
+				}
+			}
+
+			$html .= '		    </ul>';
+		}			
+		
+		$content .= $html;
+		
+			
+/*		$content .= '		</div>' . PHP_EOL;
+		$content .= '	</div>' . PHP_EOL; */
+		
+		$content .= '</div>' . PHP_EOL;
+
+		//$content .= '<span id="bimbler-debug-output"></span>' . PHP_EOL;
+			
+
+	} else {
+		$content .= '<h2>Please log in.</h2>' . PHP_EOL;
+	}
+
+	echo $content;
+}	
 
 function bimbler_create_tabs($tabs,$count, $event_id) {
 	//global $event_id;
@@ -606,7 +804,8 @@ function bimbler_create_tabs($tabs,$count, $event_id) {
 			'event-details'		=> 'Details',
 			'event-map'			=> 'Map',
 			'event-rsvps'		=> 'RSVPs',
-			'event-photos'		=> 'Photos'
+			'event-photos'		=> 'Photos',
+			'event-tracker'		=> 'Tracker'
 			//'event-comments'	=> 'Comments'
 	);
 	$icons = array(
@@ -615,7 +814,8 @@ function bimbler_create_tabs($tabs,$count, $event_id) {
 			'event-map'  		=> 'fa fa-map-marker', //fa fa-clock-o',
 			//'event-rsvps' 		=> 'fa fa-check-square-o',
 			'event-rsvps' 		=> 'fa fa-users',
-			'event-photos' 		=> 'fa fa-camera'
+			'event-photos' 		=> 'fa fa-camera',
+			'event-tracker'		=> 'fa fa-compass'
 			//'event-comments'	=> 'fa fa-calendar'
 	);
 
@@ -624,7 +824,8 @@ function bimbler_create_tabs($tabs,$count, $event_id) {
 			'event-details'  	=> 0,
 			'event-map'  		=> 0,
 			'event-rsvps' 		=> Bimbler_RSVP::get_instance()->count_rsvps ($event_id),
-			'event-photos' 		=> Bimbler_RSVP::get_instance()->get_gallery_pic_count ($event_id)
+			'event-photos' 		=> Bimbler_RSVP::get_instance()->get_gallery_pic_count ($event_id),
+			'event-tracker'		=> 0
 	);
 
 	$text_style = 'none';
@@ -634,10 +835,10 @@ function bimbler_create_tabs($tabs,$count, $event_id) {
 
 		if ($counts[$tab] > 0) {
 // Just text				$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><span style="display: block;">%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
-			$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s" data-notifications="%5$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
+			$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" data-toggle="bimbler-tab" title="%4$s" data-notifications="%5$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab], $counts[$tab]) . PHP_EOL;
 		} else {
 // Just text				$output .= sprintf('      <li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><span style="display: block;">%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
-			$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" title="%4$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
+			$output .= sprintf('		<li class="bimbler-tab bimbler-badge tab-%1$s"><a href="#tab-%2$s" data-toggle="bimbler-tab" title="%4$s"><i class="%3$s"></i><span>%4$s</span></a></li>',$tab, $tab, $icons[$tab], $titles[$tab]) . PHP_EOL;
 		}
 	}
 	$output .= '	</ul>' . PHP_EOL;
@@ -656,7 +857,8 @@ $order = array(
 		'event-details'		=> 2,
 		'event-map'			=> 3,
 		'event-rsvps'		=> 4,
-		'event-photos'		=> 5
+		'event-photos'		=> 5,
+		'event-tracker'		=> 6
 		//'event-comments'	=> 5
 );
 
@@ -665,7 +867,8 @@ $tabs_enabled = array(
 		'event-details'		=> get_ride_page($event_id), // Returns zero if no page.
 		'event-map'			=> 1,
 		'event-rsvps'		=> 1,
-		'event-photos'		=> 1
+		'event-photos'		=> 1,
+		'event-tracker'		=> 1 //get_event_in_progress ($event_id) 
 );
 
 asort($order);
@@ -771,6 +974,15 @@ $scroller_style = '';
 			</div>	
 		</ul> <!-- tab-event-comments -->
 		
+		<ul id="tab-event-tracker" class="bimbler-tab avatars-enabled group">
+			<div class="pad group">
+<?php 
+			show_tracker($event_id); 
+?>
+			</div>	
+		</ul> <!-- tab-event-tracker -->
+		
+
 	</div> <!-- bimbler-tabs-container -->
 	
 <?php 
