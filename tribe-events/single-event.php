@@ -65,6 +65,23 @@ function bimbler_get_avatar_img ($avatar) {
 	(string) $matches[1] : '';
 }
 
+/*
+// Determines whether the current user can edit their own event.
+function user_is_editor () {
+
+	return Bimbler_RSVP::get_instance()->is_editor ();
+
+}
+
+
+// Determines whether the current user can edit any event.
+function user_is_author () {
+
+	return Bimbler_RSVP::get_instance()->is_author ();
+
+}
+*/
+
 /**
  * Adds the photo gallery to the event.
  *
@@ -155,6 +172,7 @@ function show_ride_page () {
 		//var_dump ($post_object->post_content);
 		
 		if (current_user_can ('manage_options')) {
+//		if (user_is_editor ()) {
 			echo '<h3>Ride Details <a href="' . site_url () . '/wp-admin/post.php?post=' . $meta_ride_page . '&action=edit" target="_external"><i class="fa fa-pencil"></i></a></h3>';
 		} else {
 			echo '<h3>Ride Details</h3>';
@@ -205,6 +223,102 @@ function can_modify_attendance ($event_id = null) {
 
 }
 
+function show_yes_rsvp_badge ($user_id, $event_id, $rsvp_id = null, $user_is_host = false, $guests = null, $comment = null, $attended = null, $has_event_passed = null) {
+	$html = '';
+	
+	$user_info   = get_userdata ($user_id);
+
+	$avatar = '';
+		
+	if (isset ($user_info->user_login)) {
+		$avatar .= get_avatar ($user_id, null, null, $user_info->user_login);
+	}
+
+	$html .= '<li class="AvatarListSide bimbler-avatar-narrow">';
+		
+	// Output an innocuous DIV if the user cannot amend attendance, or if the Ajax module is not loaded.
+	if (!can_modify_attendance ($event_id)) {
+		$html .= '<div class="rsvp-checkin-container-noajax">';
+	}
+	else {
+		// Store the RSVP ID.
+		$html .= '<div class="rsvp-checkin-container" id="'. $rsvp_id .'">';
+	}
+		
+	// Work around the iOS bug...
+	$html .= '							<img src="' . bimbler_get_avatar_img($avatar) . '" style="width:64 !important;  height:64 !important;" class="avatar avatar-96 wp-user-avatar wp-user-avatar-96 alignnone photo">' . PHP_EOL;
+
+	// Only show if the event has ended or we're admin / host.
+	if (can_modify_attendance ($event_id) || $has_event_passed)
+	{
+		$html .= '<div class="rsvp-checkin-indicator" id="rsvp-checkin-indicator-'. $rsvp_id .'">'; // Content will be replaced by Ajax.
+
+		if (!isset ($attended)) {
+			$html .= '<div class="rsvp-checkin-indicator-none"><i class="fa-question-circle"></i></div>';
+		} else if ('Y' == $attended) {
+			$html .= '<div class="rsvp-checkin-indicator-yes"><i class="fa-check-circle"></i></div>';
+		}
+		else {
+			$html .= '<div class="rsvp-checkin-indicator-no"><i class="fa-times-circle"></i></div>';
+		}
+
+		$html .= '</div>';
+	}
+
+	$html .= '</div> <!-- rsvp-checkin-container -->';
+
+	if (isset ($user_info->user_nicename)) {
+		$html .= '<p><a href="/profile/' . urlencode ($user_info->user_nicename) .'/">' . $user_info->nickname;
+
+		if ($guests > 0) {
+			$html .= ' + ' . $guests;
+		}
+
+		$html .= '</a>';
+
+		if ($user_is_host) {
+			$html .= '<br>(Host)'; 
+		}
+
+		if (!empty($comment)) {
+			$html .= '<br><em>' . $comment . '</em>'; 
+		}
+
+		$html .= '</p>';
+	}
+		
+	$html .= '</li>';
+						
+	return $html;
+}
+
+function show_no_rsvp_badge ($user_id, $event_id, $comment = null, $attended = null) {
+
+	$html = '';
+	
+	$user_info   = get_userdata ($user_id);
+	
+	if (isset ($user_info->user_login)) {
+		$avatar = get_avatar ($user_id, null, null, $user_info->user_login);
+
+		$html .= '<li class="AvatarListSide bimbler-avatar-narrow"><div class="permalink"></div>';
+
+		// Work around the iOS bug...
+		$html .= '							<img src="' . bimbler_get_avatar_img($avatar) . '" style="width:64 !important;  height:64 !important;" class="avatar avatar-96 wp-user-avatar wp-user-avatar-96 alignnone photo">' . PHP_EOL;
+		
+		$html .= '<p><a href="/profile/' . urlencode ($user_info->user_nicename) .'/">' . $user_info->nickname;
+
+		$html .= '</a>';
+		
+		if (!empty($comment)) {
+			$html .= '<br><em>' . $comment . '</em>'; 
+		}
+		
+		$html .= '<p></li>';
+	}
+	
+	return $html;	
+}
 
 /**
  * Adds the RSVP list to the event.
@@ -281,71 +395,15 @@ function show_rsvp_table () {
 				$html .= '		    <ul>';
 	
 				foreach ( $rsvps as $rsvp) {
-	
-					$user_info   = get_userdata ($rsvp->user_id);
-	
-					$avatar = '';
-						
-					if (isset ($user_info->user_login)) {
-						$avatar .= get_avatar ($rsvp->user_id, null, null, $user_info->user_login);
-					}
-						
-					$comment = stripslashes ($rsvp->comment); // De-escape the DB data.
-					$attend = $rsvp->attended;
-	
-					$html .= '<li class="AvatarListSide bimbler-avatar-narrow">';
-						
-					// Output an innocuous DIV if the user cannot amend attendance, or if the Ajax module is not loaded.
-					if (!can_modify_attendance ($postid)) {
-						$html .= '<div class="rsvp-checkin-container-noajax">';
-					}
-					else {
-						// Store the RSVP ID.
-						$html .= '<div class="rsvp-checkin-container" id="'. $rsvp->id .'">';
-					}
-						
-					// Use the new avatar style.
-					//$html .= '						<div class="avatar-rsvps-clipped" style="background-image: url(\'' . bimbler_get_avatar_img($avatar)  . '\');"></div>' . PHP_EOL;
-					// Work around the iOS bug...
-					$html .= '							<img src="' . bimbler_get_avatar_img($avatar) . '" style="width:64 !important;  height:64 !important;" class="avatar avatar-96 wp-user-avatar wp-user-avatar-96 alignnone photo">' . PHP_EOL;
-
-					// Only show if the event has ended or we're admin / host.
-					if (can_modify_attendance ($postid) || $has_event_passed)
-					{
-						$html .= '<div class="rsvp-checkin-indicator" id="rsvp-checkin-indicator-'. $rsvp->id .'">'; // Content will be replaced by Ajax.
-	
-						if (!isset ($attend)) {
-							$html .= '<div class="rsvp-checkin-indicator-none"><i class="fa-question-circle"></i></div>';
-						} else if ('Y' == $attend) {
-							$html .= '<div class="rsvp-checkin-indicator-yes"><i class="fa-check-circle"></i></div>';
-						}
-						else {
-							$html .= '<div class="rsvp-checkin-indicator-no"><i class="fa-times-circle"></i></div>';
-						}
-	
-						$html .= '</div>';
-					}
-	
-					$html .= '</div> <!-- rsvp-checkin-container -->';
-	
-					if (isset ($user_info->user_nicename)) {
-						$html .= '<p><a href="/profile/' . urlencode ($user_info->user_nicename) .'/">' . $user_info->nickname;
-	
-						if ($rsvp->guests > 0) {
-							$html .= ' + ' . $rsvp->guests;
-						}
-	
-						$html .= '</a>';
-
-						if (in_array ($user_info->id, $host_users)) {
-							$html .= '<br>(Host)'; 
-						}
-
-						$html .= '</p>';
-						
-					}
-						
-					$html .= '</li>';
+					
+					$html .= show_yes_rsvp_badge (	$rsvp->user_id, 
+													$postid, 
+													$rsvp->id, 
+													in_array ($rsvp->user_id, $host_users), 
+													$rsvp->guests, 
+													stripslashes ($rsvp->comment), 
+													$rsvp->attended,
+													$has_event_passed);
 				}
 	
 				$html .= '		    </ul>';
@@ -368,25 +426,9 @@ function show_rsvp_table () {
 					
 				foreach ( $rsvps_n as $rsvp) {
 	
-					$comment = stripslashes ($rsvp->comment); // De-escape the DB data.
-						
-					$user_info   = get_userdata ($rsvp->user_id);
-						
-					if (isset ($user_info->user_login)) {
-						$avatar = get_avatar ($rsvp->user_id, null, null, $user_info->user_login);
-	
-						$html .= '<li class="AvatarListSide bimbler-avatar-narrow"><div class="permalink"></div>';
-
-						// Use the new avatar style.
-						//$html .= '						<div class="avatar-rsvps-clipped" style="background-image: url(\'' . bimbler_get_avatar_img($avatar)  . '\');"></div>' . PHP_EOL;
-						
-						// Work around the iOS bug...
-						$html .= '							<img src="' . bimbler_get_avatar_img($avatar) . '" style="width:64 !important;  height:64 !important;" class="avatar avatar-96 wp-user-avatar wp-user-avatar-96 alignnone photo">' . PHP_EOL;
-						
-						$html .= '<p><a href="/profile/' . urlencode ($user_info->user_nicename) .'/">' . $user_info->nickname;
-	
-						$html .= '</a><p></li>';
-					}
+					$html .= show_no_rsvp_badge (	$rsvp->user_id, 
+													$postid,
+													stripslashes ($rsvp->comment));
 				}
 					
 				$html .= '		    </ul>';
@@ -556,6 +598,7 @@ function show_summary_page () {
 ?>
 			<?php 
 				if (current_user_can( 'manage_options')) {																																				
+//				if (user_is_author()) {																																				
 					the_title( '<h1 class="post-title">', '<a href="' . site_url () . '/wp-admin/post.php?post=' . get_the_ID() . '&action=edit" target="_external"><i class="fa fa-pencil"></i></a>&nbsp;<a href="' . site_url () . '/wp-admin/admin.php?page=mailusers-send-to-group-page&rsvp_event_id=' . get_the_ID() . '" target="_external"><i class="fa fa-envelope-o"></i></a></h1>' );
 				} else {
 					the_title( '<h1 class="post-title">', '</h1>' );
