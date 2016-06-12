@@ -57,7 +57,7 @@ if($footer_layout!="no-footer"){ ?>
 	<?php // Start additions. ?>	
 	<div style="display: table; margin: 0 auto !important; ">
 						
-		<a href="http://www.blackchrome.com.au/portfolio/cycling-kits" target="_external"><img id="footer-logo" width="303" height="92" style="display: table; padding: 10px; margin: 0 auto !important;" src="http://bimblers.com/wp-content/uploads/2014/09/Blackchrome-Sportswear-2014-logo-trans.png" 
+		<a href="http://www.blackchrome.com.au/portfolio/cycling-kits" target="_external"><img id="footer-logo" width="303" height="92" style="display: table; padding: 10px; margin: 0 auto !important;" src="//bimblers.com/wp-content/uploads/2014/09/Blackchrome-Sportswear-2014-logo-trans.png" 
 		alt="<?php get_bloginfo('name'); ?>"></a>
 		<p>Proud ambassador for <a href="http://www.blackchrome.com.au/portfolio/cycling-kits" target="_external">Blackchrome Sportswear</a>.</p>
 	</div>
