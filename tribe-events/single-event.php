@@ -119,7 +119,7 @@ function show_gallery () {
 			//$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_basic_thumbnails" order_by="pid" order_direction="DESC"]');
 
 //			$html .= do_shortcode ('[justified_image_grid preset=3 row_height=150 lightbox=magnific mobile_lightbox=magnific filterby=on last_row=flexible load_more=once xload_more_text="Show all flowers" load_more_count_text=none load_more_limit=10 ng_gallery='. $gallery_id .']');
-			$html .= do_shortcode ('[justified_image_grid preset=3 row_height=150 lightbox=photoswipe mobile_lightbox=photoswipe filterby=on last_row=flexible load_more=once xload_more_text="Show all flowers" load_more_count_text=none load_more_limit=10 ng_gallery='. $gallery_id .']');
+			$html .= do_shortcode ('[justified_image_grid row_height=150 lightbox=photoswipe mobile_lightbox=photoswipe filterby=on last_row=flexible load_more=once xload_more_text="Show all flowers" load_more_count_text=none load_more_limit=10 ng_gallery='. $gallery_id .']');
 
 
 			//$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_pro_thumbnail_grid"]');
