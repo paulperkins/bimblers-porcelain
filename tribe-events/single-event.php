@@ -65,7 +65,7 @@ function bimbler_get_avatar_img ($avatar) {
 	(string) $matches[1] : '';
 }
 
-/*
+
 // Determines whether the current user can edit their own event.
 function user_is_editor () {
 
@@ -80,7 +80,6 @@ function user_is_author () {
 	return Bimbler_RSVP::get_instance()->is_author ();
 
 }
-*/
 
 /**
  * Adds the photo gallery to the event.
@@ -117,7 +116,12 @@ function show_gallery () {
 			//$html .= do_shortcode ('[nggallery id='. $gallery_id .' display_type="photocrati-nextgen_basic_thumbnails"]');
 			//$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_basic_extended_album"]');
 
-			$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_basic_thumbnails" order_by="pid" order_direction="DESC"]');
+			//$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_basic_thumbnails" order_by="pid" order_direction="DESC"]');
+
+//			$html .= do_shortcode ('[justified_image_grid preset=3 row_height=150 lightbox=magnific mobile_lightbox=magnific filterby=on last_row=flexible load_more=once xload_more_text="Show all flowers" load_more_count_text=none load_more_limit=10 ng_gallery='. $gallery_id .']');
+			$html .= do_shortcode ('[justified_image_grid preset=3 row_height=150 lightbox=photoswipe mobile_lightbox=photoswipe filterby=on last_row=flexible load_more=once xload_more_text="Show all flowers" load_more_count_text=none load_more_limit=10 ng_gallery='. $gallery_id .']');
+
+
 			//$html .= do_shortcode ('[ngg_images gallery_ids="'. $gallery_id .'" display_type="photocrati-nextgen_pro_thumbnail_grid"]');
 				
 			$html .= '<br><br><br><h4>Upload an Image</h4>';
@@ -171,8 +175,8 @@ function show_ride_page () {
 
 		//var_dump ($post_object->post_content);
 		
-		if (current_user_can ('manage_options')) {
-//		if (user_is_editor ()) {
+//		if (current_user_can ('manage_options')) {
+		if (user_is_editor ()) {
 			echo '<h3>Ride Details <a href="' . site_url () . '/wp-admin/post.php?post=' . $meta_ride_page . '&action=edit" target="_external"><i class="fa fa-pencil"></i></a></h3>';
 		} else {
 			echo '<h3>Ride Details</h3>';
@@ -597,8 +601,8 @@ function show_summary_page () {
 	
 ?>
 			<?php 
-				if (current_user_can( 'manage_options')) {																																				
-//				if (user_is_author()) {																																				
+//				if (current_user_can( 'manage_options')) {																																				
+				if (user_is_editor()) {																																				
 					the_title( '<h1 class="post-title">', '<a href="' . site_url () . '/wp-admin/post.php?post=' . get_the_ID() . '&action=edit" target="_external"><i class="fa fa-pencil"></i></a>&nbsp;<a href="' . site_url () . '/wp-admin/admin.php?page=mailusers-send-to-group-page&rsvp_event_id=' . get_the_ID() . '" target="_external"><i class="fa fa-envelope-o"></i></a></h1>' );
 				} else {
 					the_title( '<h1 class="post-title">', '</h1>' );
@@ -662,7 +666,7 @@ function render_tracker_canvas ($event_id, $rwgps_id) {
 	
 	$content = '';
 	
-	$nonce = wp_create_nonce('bimbler_tracker');
+	$nonce = wp_create_nonce('bimbler_locator');
 	
 	// Test.
 	//$rwgps_id = 6463068;
