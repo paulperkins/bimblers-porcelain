@@ -17,6 +17,15 @@
 -------------------------------------------------------------- */
 
 
+/* Hide event Google and iCal links. */
+.single-tribe_events .tribe-events-cal-links  {
+    display: none !important;
+}
+
+.single-tribe_events .tribe-events-cal-links {
+    display: none !important;
+}
+
 /* PP - Google map fix: make the zoom controls visible. */
 /*.tribe-events-venue-map img { max-width: inherit !important; }
 .bimbler-locator img { max-width: inherit !important; }
