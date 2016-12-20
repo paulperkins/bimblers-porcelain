@@ -26,7 +26,7 @@ if ( !defined('ABSPATH') ) { die('-1'); } ?>
 <?php
 	if (is_user_logged_in()) {
 ?>	
-		<a href="/events/ical=1"><i class="fa fa-calendar-plus-o"></i> Add to calendar.</a>
+		<a href="/events/?ical=1"><i class="fa fa-calendar-plus-o"></i> Add to calendar.</a>
 <?php	
 	} 
 ?>
