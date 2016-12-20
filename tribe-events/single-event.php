@@ -597,6 +597,45 @@ function bimbler_show_rsvp_form() {
 
 } // end add_rsvp_form
 
+function show_venue_map () {
+
+	$content = '';
+
+	$map_id = 'bimbler-next-ride-map';
+	$map_style = "width: 100%; height: 270px;";
+
+	global $wp_query;
+	$post_id = $wp_query->post->ID;
+
+	$content = '';
+
+	//$rwgps_id = $this->get_rwgps_id ($post_id);
+
+	$content .= '<div class="tribe-events-meta-group tribe-events-meta-group-organizer vcard" style="width:100%;">' . PHP_EOL;
+	$content .= '	<h3 class="tribe-events-single-section-title">Venue Map</h3>' . PHP_EOL;
+
+
+	$venue_name = tribe_get_venue($post_id); // Note: this is already URL-encoded.
+
+	$venue_address = Bimbler_RSVP::get_instance()->get_venue_address($post_id);
+
+	if (empty ($venue_address)) {
+
+		$content .= "<p>This event does not yet have a venue.</p>";
+
+	} else {
+
+//				$content .= '<div class="next-ride" id="' .  $map_id . '" data-rwgps-id="' . $rwgps_id . '" style="' . $map_style . '" data-venue-address="' . urlencode($venue_address) . '" data-venue-name="' . $venue_name . '">' . PHP_EOL;
+		$content .= '<div class="next-ride" id="' .  $map_id . '"                                   style="' . $map_style . '" data-venue-address="' . urlencode($venue_address) . '" data-venue-name="' . $venue_name . '">' . PHP_EOL;
+		$content .= '</div><!--/.next-ride -->' . PHP_EOL;
+	}
+
+	$content .= '</div>' . PHP_EOL;
+
+	return $content;
+}
+
+
 function show_summary_page () {
 	
 ?>
@@ -637,7 +676,12 @@ function show_summary_page () {
 				
 							<!-- Event meta -->
 							<?php do_action( 'tribe_events_single_event_before_the_meta' ) ?>
-								<?php echo tribe_events_single_event_meta() ?>
+				
+				
+								<?php tribe_get_template_part( 'modules/meta' ); // echo tribe_events_single_event_meta() ?>
+
+								<?php echo show_venue_map (); ?>	
+				
 							<?php do_action( 'tribe_events_single_event_after_the_meta' ) ?>
 							</div><!-- .hentry .vevent -->
 						<?php if( get_post_type() == TribeEvents::POSTTYPE && tribe_get_option( 'showComments', false ) ) comments_template() ?>
